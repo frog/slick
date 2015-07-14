@@ -70,7 +70,7 @@
                 respondTo: 'window',
                 responsive: null,
                 rows: 1,
-                rtl: $('body').prop('dir') === 'rtl',
+                rtl: $('html').attr('dir') === 'rtl',
                 slide: '',
                 slidesPerRow: 1,
                 slidesToShow: 1,
@@ -87,7 +87,6 @@
                 waitForAnimate: true,
                 zIndex: 1000
             };
-          console.log($('body').prop('dir'));
 
             _.initials = {
                 animating: false,

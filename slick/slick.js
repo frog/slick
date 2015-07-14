@@ -762,7 +762,9 @@
 
         $(document).off(_.visibilityChange, _.visibility);
 
-      //hammerjs unbind
+        //Unbind HammerJs events
+        _.hammerManager.off('swipeleft');
+        _.hammerManager.off('swiperight');
 
         _.$list.off('mouseenter.slick', $.proxy(_.setPaused, _, true));
         _.$list.off('mouseleave.slick', $.proxy(_.setPaused, _, false));

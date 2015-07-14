@@ -14,18 +14,18 @@
   Issues: http://github.com/kenwheeler/slick/issues
 
  */
-/* global window, document, define, jQuery, setInterval, clearInterval */
+/* global window, document, define, jQuery, Hammer, setInterval, clearInterval */
 (function(factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
+        define(['jquery','Hammer'], factory);
     } else if (typeof exports !== 'undefined') {
-        module.exports = factory(require('jquery'));
+        module.exports = factory(require(['jquery','Hammer']));
     } else {
-        factory(jQuery);
+        factory(jQuery, Hammer);
     }
 
-}(function($) {
+}(function($, Hammer) {
     'use strict';
     var Slick = window.Slick || {};
 
@@ -1181,6 +1181,7 @@
             _.setProps();
             _.startLoad();
             _.loadSlider();
+            _.initializeHammer();
             _.initializeEvents();
             _.updateArrows();
             _.updateDots();
@@ -1230,6 +1231,12 @@
 
     };
 
+    Slick.prototype.initializeHammer = function() {
+      var _ = this;
+      _.hammerManager = new Hammer.Manager(_.$slider[0]);
+      _.hammerManager.add( new Hammer.Swipe({ direction: Hammer.DIRECTION_HORIZONTAL }));
+    };
+
     Slick.prototype.initializeEvents = function() {
 
         var _ = this;
@@ -1238,7 +1245,22 @@
 
         _.initDotEvents();
 
-        //put hammerJs init here
+      //put hammerJs init here
+      _.hammerManager.on('swipeleft', function() {
+        if (_.options.rtl === true) {
+          _.slickPrev();
+        }else{
+          _.slickNext();
+        }
+      });
+
+      _.hammerManager.on('swiperight', function() {
+        if (_.options.rtl === true) {
+          _.slickNext();
+        }else{
+          _.slickPrev();
+        }
+      });
 
         _.$list.on('click.slick', _.clickHandler);
 
